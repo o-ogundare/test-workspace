@@ -46,8 +46,11 @@ jobs:
     - name: Verify GKE Connection
       run: |
         kubectl config get-contexts
-        kubectl get nodes
-        kubectl get pods --all-namespaces
+        kubectl version
+        kubectl config view
+        kubectl cluster-info
+        # kubectl get nodes
+        # kubectl get pods --all-namespaces
 
     - name: Authenticate with gcloud for Docker
       run: |
