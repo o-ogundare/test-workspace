@@ -161,10 +161,14 @@ jobs:
     #       --build-arg GITHUB_SHA="$GITHUB_SHA" \
     #       --build-arg GITHUB_REF="$GITHUB_REF" \
     #       .
-    - name: Pull Alpine image from Docker Hub
-      run: |- 
-         gcloud auth configure-docker europe-west4-docker.pkg.dev
-         docker pull europe-west4-docker.pkg.dev/instadeep/genomics-splicing/api:latest
+    
+    - name: Authenticate with GCR
+      run: echo ${{ secrets.GCR_CLUSTER }} | docker login -u _json_key --password-stdin https://gcr.io
+        
+    # - name: Pull Alpine image from Docker Hub
+    #   run: |- 
+    #      gcloud auth configure-docker europe-west4-docker.pkg.dev
+    #      docker pull europe-west4-docker.pkg.dev/instadeep/genomics-splicing/api:latest
     # Push the Docker image to Google Artifact Registry
 
     # - name: Publish
