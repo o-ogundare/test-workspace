@@ -43,6 +43,11 @@ jobs:
         cluster_name: ${{ env.GKE_CLUSTER }}
         location: ${{ env.GKE_ZONE }}
 
+    - name: Generate Dockerfile
+      run: |
+        echo "FROM alpine:latest" > Dockerfile
+        echo "RUN echo 'Hello, World!'" >> Dockerfile
+
     # Build the Docker image
     - name: Build
       run: |-
