@@ -42,30 +42,36 @@ jobs:
       with:
         cluster_name: ${{ env.GKE_CLUSTER }}
         location: ${{ env.GKE_ZONE }}
-        
+
+    - name: Verify GKE Connection
+      run: |
+        kubectl config get-contexts
+        kubectl get nodes
+        kubectl get pods --all-namespaces
+
     - name: Authenticate with gcloud for Docker
       run: |
-        echo $GCLOUD_SERVICE_KEY | base64 -d > gcloud-service-key.json
-        gcloud auth activate-service-account --key-file=gcloud-service-key.json
+        echo ${{ env.GKE_CLUSTER }} | base64 -d > gke-key.json
+        gcloud auth activate-service-account --key-file=gke-key.json
         gcloud auth configure-docker europe-west4-docker.pkg.dev
         
-    - name: Generate Dockerfile
-      run: |
-        echo "FROM alpine:latest" > Dockerfile
-        echo "RUN echo 'Hello, World!'" >> Dockerfile
+    # - name: Generate Dockerfile
+    #   run: |
+    #     echo "FROM alpine:latest" > Dockerfile
+    #     echo "RUN echo 'Hello, World!'" >> Dockerfile
 
     # Build the Docker image
-    - name: Build
-      run: |-
-        docker build \
-          --tag "$GAR_ZONE-docker.pkg.dev/$PROJECT_ID/$GAR_REPO/$IMAGE:$IMAGE_TAG" \
-          --build-arg GITHUB_SHA="$GITHUB_SHA" \
-          --build-arg GITHUB_REF="$GITHUB_REF" \
-          .
-    # Push the Docker image to Google Container Registry
-    - name: Publish
-      run: |-
-        docker push "$GAR_ZONE-docker.pkg.dev/$PROJECT_ID/$GAR_REPO/$IMAGE:$IMAGE_TAG"
+    # - name: Build
+    #   run: |-
+    #     docker build \
+    #       --tag "$GAR_ZONE-docker.pkg.dev/$PROJECT_ID/$GAR_REPO/$IMAGE:$IMAGE_TAG" \
+    #       --build-arg GITHUB_SHA="$GITHUB_SHA" \
+    #       --build-arg GITHUB_REF="$GITHUB_REF" \
+    #       .
+    # # Push the Docker image to Google Container Registry
+    # - name: Publish
+    #   run: |-
+    #     docker push "$GAR_ZONE-docker.pkg.dev/$PROJECT_ID/$GAR_REPO/$IMAGE:$IMAGE_TAG"
 
     # # Deploy the Docker image to the GKE cluster
     # - name: Deploy
