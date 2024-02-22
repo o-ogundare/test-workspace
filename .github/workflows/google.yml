@@ -9,8 +9,8 @@ env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
   GKE_CLUSTER: genomic-splicing-dev   # cluster name
   GKE_ZONE: europe-west4   # cluster zone
-  IMAGE: europe-west4-docker.pkg.dev/instadeep/genomics-splicing
-  # IMAGE_TAG: test # image tag
+  IMAGE: micro
+  IMAGE_TAG: test # image tag
   GAR_ZONE: europe-west4 # artifact registry zone
   GAR_REPO: genomics-splicing # artifact registry repository
 
