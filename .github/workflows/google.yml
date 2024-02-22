@@ -42,7 +42,13 @@ jobs:
       with:
         cluster_name: ${{ env.GKE_CLUSTER }}
         location: ${{ env.GKE_ZONE }}
-
+        
+    - name: Authenticate with gcloud for Docker
+      run: |
+        echo $GCLOUD_SERVICE_KEY | base64 -d > gcloud-service-key.json
+        gcloud auth activate-service-account --key-file=gcloud-service-key.json
+        gcloud auth configure-docker europe-west4-docker.pkg.dev
+        
     - name: Generate Dockerfile
       run: |
         echo "FROM alpine:latest" > Dockerfile
